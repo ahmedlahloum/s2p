@@ -7,6 +7,7 @@
 #include <math.h>
 #include <float.h>
 
+#include "fail.c"
 #include "xfopen.c"
 #include "rpc.h"
 
@@ -364,8 +365,8 @@ static void decompose_vector_basis(double a[2], double x[2], double u[2],
 {
 	double det = u[0]*v[1] - u[1]*v[0];
 	if (fabs(det) < FLT_MIN) {
-		fprintf(stderr, "ERROR: the given basis is not a basis\n");
-		fprintf(stderr, "\tu: (%g, %g), v: (%g, %g)\n", u[0], u[1], v[0], v[1]);
+		fail("ERROR: the given basis is not a basis\n"
+		 "\tu: (%g, %g), v: (%g, %g)\n", u[0], u[1], v[0], v[1]);
 	}
 	a[0] =  v[1]*x[0] - v[0]*x[1];
 	a[1] = -u[1]*x[0] + u[0]*x[1];
@@ -383,7 +384,7 @@ static void eval_nrpc_iterative(double *result,
 	double x1[2];
 	double x2[2];
 	double xf[2] = {x, y};
-	double lon = -1, lat = -1, eps = 2;
+	double lon = -0.1, lat = -0.1, eps = 0.2;
 	eval_nrpci(x0, p, lon, lat, z);
 	eval_nrpci(x1, p, lon + eps, lat, z);
 	eval_nrpci(x2, p, lon, lat + eps, z);
